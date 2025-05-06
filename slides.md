@@ -5,12 +5,10 @@ theme: seriph
 # like them? see https://unsplash.com/collections/94734566/slidev
 background: https://cover.sli.dev
 # some information about your slides (markdown enabled)
-title: Welcome to Slidev
+title: PHPでやってみよう！テストだけじゃない、デシジョンテーブル（決定表）実装の勘所
 info: |
-  ## Slidev Starter Template
-  Presentation slides for developers.
-
-  Learn more at [Sli.dev](https://sli.dev)
+  PHPカンファレンス関西2025
+  https://2025.kphpug.jp/
 # apply unocss classes to the current slide
 class: text-center
 # https://sli.dev/features/drawing
@@ -26,20 +24,24 @@ addons:
   - slidev-addon-rabbit
 ---
 
-# Welcome to Slidev
+# PHPでやってみよう！テストだけじゃない、デシジョンテーブル（決定表）実装の勘所
+PHPカンファレンス関西2025 Jul 19, 2025.  
+v0.0.1  
+@katzumi(かつみ)
 
-Presentation slides for developers @ v0.1.10
-
-<div @click="$slidev.nav.next" class="mt-12 py-1" hover:bg="white op-10">
-  Press Space for next page <carbon:arrow-right />
+<div class="pt-12">
+  <span @click="$slidev.nav.next" class="px-2 py-1 rounded cursor-pointer" hover="bg-white bg-opacity-10">
+    Press Space for next page <carbon:arrow-right class="inline"/>
+  </span>
 </div>
 
-<div class="abs-br m-6 text-xl">
-  <button @click="$slidev.nav.openInEditor" title="Open in Editor" class="slidev-icon-btn">
+<div class="abs-br m-6 flex gap-2">
+  <button @click="$slidev.nav.openInEditor()" title="Open in Editor" class="text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
     <carbon:edit />
   </button>
-  <a href="https://github.com/k2tzumi/slidev-boilerplate" target="_blank" class="slidev-icon-btn">
-    <carbon:logo-github />
+  <a href="https://github.com/k2tzumi/decision-table-implementation-tips" target="_blank" alt="GitHub" title="Open in GitHub"
+    class="text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
+    <carbon-logo-github />
   </a>
 </div>
 
@@ -49,28 +51,35 @@ The last comment block of each slide will be treated as slide notes. It will be 
 
 ---
 transition: fade-out
+layout: two-cols-header
 ---
 
-# What is Slidev？
+# 自己紹介
 
-Slidev is a slides maker and presenter designed for developers, consist of the following features
+katzumi（かつみ）と申します。
 
-- 📝 **Text-based** - focus on the content with Markdown, and then style them later
-- 🎨 **Themable** - themes can be shared and re-used as npm packages
-- 🧑‍💻 **Developer Friendly** - code highlighting, live coding with autocompletion
-- 🤹 **Interactive** - embed Vue components to enhance your expressions
-- 🎥 **Recording** - built-in recording and camera view
-- 📤 **Portable** - export to PDF, PPTX, PNGs, or even a hostable SPA
-- 🛠 **Hackable** - virtually anything that's possible on a webpage is possible in Slidev
-<br>
-<br>
+「障害のない社会をつくる」をビジョンに掲げている「LITALICO」という会社に所属しています
+<a href="https://litalico.co.jp/">
+<img src="https://litalico.co.jp/ogp.png" class="w-40" />
+</a>
 
-Read more about [Why Slidev?](https://sli.dev/guide/why)
+以下のアカウントで活動しています。
 
-<!--
-You can have `style` tag in markdown to override the style for the current page.
-Learn more: https://sli.dev/features/slide-scope-style
--->
+::left::
+
+<div class="float-left">
+<img src="https://pbs.twimg.com/profile_images/1768978237210935296/idy9J4l6_400x400.jpg" class="rounded-full w-40 mr"/>  
+<simple-icons-x /> <a href="https://twitter.com/katzchum">katzchum</a></div>  
+<QRCode :width="180" :height="180" value="https://twitter.com/katzchum" color="4329B9" image="Logo_of_X.svg" />
+
+::right::
+
+<img src="https://avatars.githubusercontent.com/u/1182787?v=4" class="rounded-full w-40 mr-12"/>
+
+<logos-github-octocat /> [k2tzumi](https://github.com/k2tzumi)  
+<simple-icons-zenn /> [katzumi](https://zenn.dev/katzumi)  
+
+<br />
 
 <style>
 h1 {
@@ -84,564 +93,525 @@ h1 {
 }
 </style>
 
-<!--
-Here is another comment.
--->
-
 ---
-transition: slide-up
-level: 2
+layout: two-cols-header
+transition: fade-out
 ---
 
-# Navigation
 
-Hover on the bottom-left corner to see the navigation's controls panel, [learn more](https://sli.dev/guide/ui#navigation-bar)
+# お願い 🙏
 
-## Keyboard Shortcuts
+写真撮影、SNS での実況について
 
-|                                                     |                             |
-| --------------------------------------------------- | --------------------------- |
-| <kbd>right</kbd> / <kbd>space</kbd>                 | next animation or slide     |
-| <kbd>left</kbd>  / <kbd>shift</kbd><kbd>space</kbd> | previous animation or slide |
-| <kbd>up</kbd>                                       | previous slide              |
-| <kbd>down</kbd>                                     | next slide                  |
+登壇者の励みになるので是非ともご意見やご感想など、フィードバック頂けると助かります mm  
+あとでスライドを公開します
 
-<!-- https://sli.dev/guide/animations.html#click-animation -->
-<img
-  v-click
-  class="absolute -bottom-9 -left-7 w-80 opacity-50"
-  src="https://sli.dev/assets/arrow-bottom-left.svg"
-  alt=""
-/>
-<p v-after class="absolute bottom-23 left-45 opacity-30 transform -rotate-10">Here!</p>
+::left::
 
----
-layout: two-cols
-layoutClass: gap-16
----
-
-# Table of contents
-
-You can use the `Toc` component to generate a table of contents for your slides:
-
-```html
-<Toc minDepth="1" maxDepth="1" />
-```
-
-The title will be inferred from your slide content, or you can override it with `title` and `level` in your frontmatter.
+<Transform :scale="2.5">
+　　　🙆‍♀📷<ph-projector-screen-chart-light /><br />
+　　　🙅‍♂📹💸<br />
+　　　🙅📸👨‍👦‍👦<br />
+</Transform>
 
 ::right::
 
-<Toc text-sm minDepth="1" maxDepth="2" />
+<br />
+<Transform :scale="2">
+<fa6-brands-square-x-twitter />
+</Transform>
+<br />
+<a href="https://x.com/search?q=%23phpkansai&f=live">#phpkansai</a>
+
+
+<!-- 本セッションでは、撮影やSNS拡散を歓迎しています。ご自由に写真を撮影して、XなどのSNSでシェアしてください。 　　
+ただし、以下の点にご注意ください。　　
+
+著作権などの法的な問題を避けるために、スライドや登壇者の写真や動画を無断で商用利用しないでください。　　
+他の参加者のプライバシーや迷惑にならないように、撮影や投稿する際には配慮してください。　　
+SNSでシェアする際には、ハッシュタグ「#phpcon_nagoya #s」をつけてください。　　
+これにより、本セッションの関連情報を簡単に検索できるようになります。 -->
 
 ---
-layout: image-right
-image: https://cover.sli.dev
+layout: default
+transition: slide-up
 ---
 
-# Code
+# 本セッションで得られること
 
-Use code snippets and get the highlighting directly, and even types hover！
+* **デシジョンテーブルの本質的な理解**  
+テスト設計だけではない実装パターンとしての価値
 
-```ts {all|5|7|7-8|10|all} twoslash
-// TwoSlash enables TypeScript hover information
-// and errors in markdown code blocks
-// More at https://shiki.style/packages/twoslash
+* **複雑な条件分岐を美しく整理する手法**  
+入れ子になったif文からの脱却
 
-import { computed, ref } from 'vue'
+* **明日のプロジェクトですぐに活用できる実装テクニック**  
+  - Enumと型を活用した堅牢な実装方法
+  - 保守性と品質を両立するアーキテクチャ
 
-const count = ref(0)
-const doubled = computed(() => count.value * 2)
-
-doubled.value = 2
-```
-
-<arrow v-click="[4, 5]" x1="350" y1="310" x2="195" y2="334" color="#953" width="2" arrowSize="1" />
-
-<!-- This allow you to embed external code blocks -->
-<<< @/snippets/external.ts#snippet
-
-<!-- Footer -->
-
-[Learn more](https://sli.dev/features/line-highlighting)
-
-<!-- Inline style -->
-<style>
-.footnotes-sep {
-  @apply mt-5 opacity-10;
-}
-.footnotes {
-  @apply text-sm opacity-75;
-}
-.footnote-backref {
-  display: none;
-}
-</style>
-
-<!--
-Notes can also sync with clicks
-
-[click] This will be highlighted after the first click
-
-[click] Highlighted with `count = ref(0)`
-
-[click:3] Last click (skip two clicks)
--->
+* **全パターンテスト可能な設計アプローチ**  
+条件判定処理の妥当性を自動検証する方法
 
 ---
-level: 2
+
+# デシジョンテーブルとは何か
+基本概念と構造
+
+* **デシジョンテーブル（決定表）の定義**
+  - 複数の条件と結果の組み合わせを表形式で整理した意思決定ツール
+  - 条件部（Condition）と動作部（Action）で構成される
+
+* **一般的な表現形式**
+  - 条件の組み合わせを列（列挙型）または行（行挙型）として表現
+  - 各条件の状態を「Yes/No」「True/False」などで表す
+
+* **テスト設計での活用例**
+  - テストケースの漏れを防ぐ
+  - 条件の組み合わせを網羅的に可視化する
+
 ---
 
-# Shiki Magic Move
+# デシジョンテーブル例（住宅ローン審査基準の場合）
+条件に雇用形態、勤続年数、年収を持つ場合（サンプルなので簡略化したイメージです）。列挙型パターン
 
-Powered by [shiki-magic-move](https://shiki-magic-move.netlify.app/), Slidev supports animations across multiple code snippets.
+<Transform :scale="0.8">
 
-Add multiple code blocks and wrap them with <code>````md magic-move</code> (four backticks) to enable the magic move. For example:
+|      |       | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+|------|-------|---|---|---|---|---|---|---|---|---|
+| 条件 | 正社員 | Y | Y | Y | Y | N | N | N | N | N |
+|      | 契約社員 | N | N | N | N | Y | Y | Y | Y | N |
+|      | 無職  | N | N | N | N | N | N | N | N | Y |
+|      | 勤続3年以上 | Y | Y | N | N | Y | Y | N | N | - |
+|      | 年収400万以上 | Y | N | Y | N | Y | N | Y | N | - |
+| 動作 | 承認  | X | - | - | - | - | - | - | - | - |
+|      | 条件付承認 | - | X | X | - | X | - | - | - | - |
+|      | 詳細審査 | - | - | - | X | - | X | X | - | - |
+|      | 不承認 | - | - | - | - | - | - | - | X | X |
 
-````md magic-move {lines: true}
-```ts {*|2|*}
-// step 1
-const author = reactive({
-  name: 'John Doe',
-  books: [
-    'Vue 2 - Advanced Guide',
-    'Vue 3 - Basic Guide',
-    'Vue 4 - The Mystery'
-  ]
-})
-```
+</Transform>
 
-```ts {*|1-2|3-4|3-4,8}
-// step 2
-export default {
-  data() {
-    return {
-      author: {
-        name: 'John Doe',
-        books: [
-          'Vue 2 - Advanced Guide',
-          'Vue 3 - Basic Guide',
-          'Vue 4 - The Mystery'
-        ]
+---
+layout: two-cols-header
+transition: fade-out
+---
+
+# テスト設計手法としてのデシジョンテーブル
+一般的な利用法と導入活用イメージ
+
+::left::
+
+* **テストケース設計の効率化**
+  - 条件の組み合わせを網羅的に可視化
+  - 漏れや重複のないテストケース作成が可能
+
+* **テスト観点の明確化**
+  - 条件と結果の関係性を明示的に表現
+  - チーム内での認識共有が容易
+
+* **境界値・同値分割との組み合わせ**
+  - 各条件の境界値を考慮したテストケース設計
+  - 効率的なテストカバレッジの向上
+
+::right::
+
+* **複雑なビジネスルールのテスト**
+  - 複数条件が絡み合う業務ロジックの検証
+  - 例外ケースの漏れを防止
+
+* **回帰テストへの活用**
+  - 仕様変更時の影響範囲の特定
+  - 変更部分に関連するテストケースの選定
+
+---
+
+
+# 今回のテーマ
+
+---
+
+# 🙅 デシジョンテーブル（決定表）を作成する
+テスト設計とか、仕様をまとめるのに利用するのではなく。。
+
+---
+
+# 🙆 デシジョンテーブル（決定表）を実装する
+
+---
+
+# 改めて自己紹介
+
+---
+
+# 日々複雑なドメインと向き合っている者です
+圧巻の1.5K頁オーバー。3年に一回、大改訂（大改定）があります。レセプト業務の基盤システムを開発しています！
+
+<img src="/ISBN-978-4805887332.png" />
+
+---
+
+# 「レセプト業務」って何？
+医療では点数計算（1点=10円）されたものを窓口で自己負担3割分を支払う。点数計算やら
+
+* **概要**  
+障害福祉サービスや介護事業所で提供されたサービスの費用を計算し、市町村や国保連などの支払い機関に請求する業務です。  
+利用者は費用の一部（利用者負担額）を支払い、残りの公費・保険負担分を正確に計算し請求するのが重要な役割です。  
+計算の基となるのは、サービス内容に応じて定められた「単位数」です。これは「単位数表」で定義されています。  
+
+* **計算ルールをまとめたもの=単位数表を図式化したもの＝算定構造**  
+単位数を計算するプロセスを「算定」と呼びます。  
+算定には国が定めた非常に細かくて複雑なルールがたくさんあります。  
+これらの算定ルール及び、単位数表の関係を図式化したものが「算定構造」と呼びます。  
+この算定構造は表形式でまとめられています。
+
+---
+
+# 算定構造表（実物）
+
+---
+
+# 結構複雑。。
+
+---
+
+# 元の原文（実物）
+報酬告示という内容になります
+
+---
+
+# もっと複雑。。
+
+---
+
+# 😥 どうやって実装すれば。。
+
+---
+
+# ともあれ何も考えなしに実装するとこうなりがち。。
+算定ルールは巨大なifとswitch文となる
+
+<Tweet id="476731996878553088" />
+
+---
+
+# 手続き的にルールを書くことの弊害
+色々あるけれど
+
+* コードのネストが深く可読性が低い  
+所謂波動拳が発動する
+* 認知負荷が高い  
+元々複雑で図式化されているのに、手続きとして文章化（コード化）するとインピーダンスミスマッチ ^[ルールは宣言的だが、手続き的にすると直感的でなくなり、重複も発生する] が発生する
+* 同じルールが散らばってしまう  
+* 条件に関する入力データ（事実）も条件の組み合わせ（ルール）によって必要なものが変わってくる  
+事実、条件、動作までを密結合させてしまうと、更に複雑になってしまう
+
+---
+
+# 💡デシジョンテーブル（決定表）の実装の機運！
+
+---
+layout: two-cols-header
+transition: fade-out
+---
+
+# デシジョンテーブル（決定表）の使いドコロ
+このスライドにピンときたら
+
+::left::
+
+## 有効な業務
+
+* 審査・承認業務  
+* 診断・レコメンデーション業務  
+* リスク評価・不正検知
+* 自動応答・問い合わせルーティング
+* 業務フローの自動化・タスク割り当て
+* コンフィギュレーション・設定
+
+::right::
+
+## 適している業務の一般的な特徴
+
+* 判断基準が明確  
+意思決定や処理の分岐が、複数の論理的なルールによって定義できる。
+* ルールの変更が発生する可能性  
+法改正、社内規定の変更、新商品の追加などにより、判断基準が変わることが比較的頻繁にある。
+* 例外処理が多い  
+定型的な処理だけでなく、多様な例外ケースに対する対応が必要。
+* 属人化された知識の形式知化  
+特定の担当者の経験や知識に基づいた判断基準を、誰でも理解できる形で共有・自動化したい。
+
+
+---
+
+# PHPでのデシジョンテーブル実装テクニック
+
+
+---
+
+# Enumを活用した条件定義
+条件定義の構造化アプローチ
+
+* **条件は全てEnum（列挙型）の配列で定義**
+  - クラス定数や文字列のマジックナンバー使用を排除
+  - 条件の定義場所を一元化し保守性を向上
+
+* **Enumの区分値はドメイン用語（日本語）で定義**
+  - 開発者とビジネス担当者の共通言語として機能  
+  例: `EmploymentStatus::社員`, `EmploymentStatus::契約社員`
+  - コードとビジネスルールの対応関係を明確化
+
+* **数値条件もEnum化**
+  - 境界値を明示的に表現  
+  例: `AnnualIncome::３００万未満`, `AnnualIncome::３００-５００万`, `AnnualIncome::５００万以上`
+  - 変換ロジックも凝集させてテストしやすく
+
+---
+
+# Enumを活用した条件定義（実装例）
+
+* **条件は全てEnum（列挙型）の配列で定義**  
+日本語も使うと、表と同じになる
+  ```php
+  [ EmploymentStatus::社員, AnnualIncome::５００万以上 ]
+  ```
+
+* **数値条件もEnum化**  
+  ```php
+  enum AnnualIncome
+  {
+    case ３００万未満;
+    case ３００-５００万;
+    case ５００万以上;
+
+    public static function convert(int $value) : self
+    {
+      return match(true) {
+        $value >= 500 => self::５００万以上,
+        $value >= 300 => self::３００-５００万,
+        default => self::３００万未満
+      };
+    }
+  }
+  ```
+
+---
+
+# 決定ルールをGenerator関数で定義
+効率的なルール定義と実行
+
+* **決定ルールはGenerator関数で定義**
+  - イテレータとして条件の組み合わせを生成  
+  `yield` と `yield from`で柔軟に手続き的にルールを生成できる
+
+* **時系列で条件を変化させる**
+  - 制度変更や期間限定ルールに対応
+  - 日付による条件の切り替えを明示的に表現
+
+* **ルールの実態クラスのオブジェクトは別途生成**
+  - 生の配列の方が記述量が少なく見やすい
+  - 必要なケースだけを遅延評価でオブジェクト生成  
+  ケースが大量になるとメモリ使用量も馬鹿にならない
+
+---
+
+# 決定ルールをGenerator関数で定義（実装例）
+
+* **決定ルールはGenerator関数で定義**  
+時系列で条件を変化させたり、部分的に繰り返しルール適用したりする
+  ```php
+  public function generateRules(): Generator
+  {
+    yield ['承認', [EmploymentStatus::社員, Tenure::勤続３年以上, AnnualIncome::５００万以上]];
+
+    // 非承認ルールの生成（無職は勤続年数、年収は不問）
+    yield from generateDisapprovalRules();
+
+    // 2025年7月以降のルール
+    if ($reviewIn >= '202507') {
+      // 条件緩和
+      yield ['詳細審査', [EmploymentStatus::契約社員, Tenure::勤続３年以上, AnnualIncome::５００万以上]];
+    }
+  }
+  public function generateDisapprovalRules(): Generator
+  {
+    foreach (Tenure::cases() as $tenure) {
+      foreach (AnnualIncome::cases() as $annualIncome) {
+        yield ['非承認', [EmploymentStatus::無職, $tenure, annualIncome]];
       }
     }
   }
-}
-```
+  ```
 
-```ts
-// step 3
-export default {
-  data: () => ({
-    author: {
-      name: 'John Doe',
-      books: [
-        'Vue 2 - Advanced Guide',
-        'Vue 3 - Basic Guide',
-        'Vue 4 - The Mystery'
-      ]
+---
+
+# 決定ルールをGenerator関数で定義（実装例）
+
+* **ルールの実態クラスのオブジェクトは別途生成**  
+オブジェクト生成は外側で行い、ルール自体は遅延評価する
+  ```php
+  public function generateRuleObjects(): Generator
+  {
+    foreach ($this->generateRules() as $ruleSet) {
+      // 動作部と条件部を分離させる
+      list($action, $rule) = ruleSet;
+      yield new Rule($action, $rule);
     }
-  })
+  }
+  public function getMatchAction(array $facts): ?Action
+  {
+    foreach ($this->generateRuleObjects() as $ruleObject) {
+      if ($ruleObject->canMatch($facts)) {
+        // 動作が特定できた以降のルールは評価されない
+        return $ruleObject->makeAction();
+      }
+
+      return null;
+    }
+  }
+  ```
+
+---
+
+# 特殊条件の型による制御
+型システムを活用した柔軟な条件定義
+
+* **全ての条件に共通となるマーカーインタフェースを付与**
+  - 型安全性の確保
+  ```php
+  interface Condition {}
+  enum AnnualIncome implements Condition {
+    // .. snip ..
+  }
+  /**
+   * @param list<Condition> $facts
+   */
+  public function getMatchAction(array $facts): ?Action
+  ```
+* **複合条件の中から、一つの条件を選択**  
+複数条件の組み合わせを型で制御
+  - 例: 顧客に複数の割引条件が適用可能な場合に、一番割引率が高いもののみを適用させる
+* **動作への特殊制御**  
+特殊制御用の型を定義する。決定ルールには使われないが、動作には反映される
+  - 例: 動作を繰り返し実行させる
+
+---
+
+# 特殊条件の型による制御（実装例）
+型システムを活用した柔軟な条件定義
+
+* **複合条件の中から、一つの条件を選択**  
+```php
+interface DiscountCondition extends Condition
+{
+  public function getDiscountRate(): float;
 }
-```
+enum MemberRank implements DiscountCondition
+{
+  case ランクA;
+  case ランクB;
+  case ランクC;
 
-Non-code blocks are ignored.
-
-```vue
-<!-- step 4 -->
-<script setup>
-const author = {
-  name: 'John Doe',
-  books: [
-    'Vue 2 - Advanced Guide',
-    'Vue 3 - Basic Guide',
-    'Vue 4 - The Mystery'
-  ]
-}
-</script>
-```
-````
-
----
-
-# Components
-
-<div grid="~ cols-2 gap-4">
-<div>
-
-You can use Vue components directly inside your slides.
-
-We have provided a few built-in components like `<Tweet/>` and `<Youtube/>` that you can use directly. And adding your custom components is also super easy.
-
-```html
-<Counter :count="10" />
-```
-
-<!-- ./components/Counter.vue -->
-<Counter :count="10" m="t-4" />
-
-Check out [the guides](https://sli.dev/builtin/components.html) for more.
-
-</div>
-<div>
-
-```html
-<Tweet id="1390115482657726468" />
-```
-
-<Tweet id="1390115482657726468" scale="0.65" />
-
-</div>
-</div>
-
-<!--
-Presenter note with **bold**, *italic*, and ~~striked~~ text.
-
-Also, HTML elements are valid:
-<div class="flex w-full">
-  <span style="flex-grow: 1;">Left content</span>
-  <span>Right content</span>
-</div>
--->
-
----
-class: px-20
----
-
-# Themes
-
-Slidev comes with powerful theming support. Themes can provide styles, layouts, components, or even configurations for tools. Switching between themes by just **one edit** in your frontmatter:
-
-<div grid="~ cols-2 gap-2" m="t-2">
-
-```yaml
----
-theme: default
----
-```
-
-```yaml
----
-theme: seriph
----
-```
-
-<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-default/01.png?raw=true" alt="">
-
-<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-seriph/01.png?raw=true" alt="">
-
-</div>
-
-Read more about [How to use a theme](https://sli.dev/guide/theme-addon#use-theme) and
-check out the [Awesome Themes Gallery](https://sli.dev/resources/theme-gallery).
-
----
-
-# Clicks Animations
-
-You can add `v-click` to elements to add a click animation.
-
-<div v-click>
-
-This shows up when you click the slide:
-
-```html
-<div v-click>This shows up when you click the slide.</div>
-```
-
-</div>
-
-<br>
-
-<v-click>
-
-The <span v-mark.red="3"><code>v-mark</code> directive</span>
-also allows you to add
-<span v-mark.circle.orange="4">inline marks</span>
-, powered by [Rough Notation](https://roughnotation.com/):
-
-```html
-<span v-mark.underline.orange>inline markers</span>
-```
-
-</v-click>
-
-<div mt-20 v-click>
-
-[Learn more](https://sli.dev/guide/animations#click-animation)
-
-</div>
-
----
-
-# Motions
-
-Motion animations are powered by [@vueuse/motion](https://motion.vueuse.org/), triggered by `v-motion` directive.
-
-```html
-<div
-  v-motion
-  :initial="{ x: -80 }"
-  :enter="{ x: 0 }"
-  :click-3="{ x: 80 }"
-  :leave="{ x: 1000 }"
->
-  Slidev
-</div>
-```
-
-<div class="w-60 relative">
-  <div class="relative w-40 h-40">
-    <img
-      v-motion
-      :initial="{ x: 800, y: -100, scale: 1.5, rotate: -50 }"
-      :enter="final"
-      class="absolute inset-0"
-      src="https://sli.dev/logo-square.png"
-      alt=""
-    />
-    <img
-      v-motion
-      :initial="{ y: 500, x: -100, scale: 2 }"
-      :enter="final"
-      class="absolute inset-0"
-      src="https://sli.dev/logo-circle.png"
-      alt=""
-    />
-    <img
-      v-motion
-      :initial="{ x: 600, y: 400, scale: 2, rotate: 100 }"
-      :enter="final"
-      class="absolute inset-0"
-      src="https://sli.dev/logo-triangle.png"
-      alt=""
-    />
-  </div>
-
-  <div
-    class="text-5xl absolute top-14 left-40 text-[#2B90B6] -z-1"
-    v-motion
-    :initial="{ x: -80, opacity: 0}"
-    :enter="{ x: 0, opacity: 1, transition: { delay: 2000, duration: 1000 } }">
-    Slidev
-  </div>
-</div>
-
-<!-- vue script setup scripts can be directly used in markdown, and will only affects current page -->
-<script setup lang="ts">
-const final = {
-  x: 0,
-  y: 0,
-  rotate: 0,
-  scale: 1,
-  transition: {
-    type: 'spring',
-    damping: 10,
-    stiffness: 20,
-    mass: 2
+  public function getDiscountRate(): float
+  {
+    return match($this) {
+      self::ランクA => 0.3,
+      self::ランクB => 0.15,
+      self::ランクC => 0.0
+    };
   }
 }
-</script>
-
-<div
-  v-motion
-  :initial="{ x:35, y: 30, opacity: 0}"
-  :enter="{ y: 0, opacity: 1, transition: { delay: 3500 } }">
-
-[Learn more](https://sli.dev/guide/animations.html#motion)
-
-</div>
-
----
-
-# LaTeX
-
-LaTeX is supported out-of-box. Powered by [KaTeX](https://katex.org/).
-
-<div h-3 />
-
-Inline $\sqrt{3x-1}+(1+x)^2$
-
-Block
-$$ {1|3|all}
-\begin{aligned}
-\nabla \cdot \vec{E} &= \frac{\rho}{\varepsilon_0} \\
-\nabla \cdot \vec{B} &= 0 \\
-\nabla \times \vec{E} &= -\frac{\partial\vec{B}}{\partial t} \\
-\nabla \times \vec{B} &= \mu_0\vec{J} + \mu_0\varepsilon_0\frac{\partial\vec{E}}{\partial t}
-\end{aligned}
-$$
-
-[Learn more](https://sli.dev/features/latex)
-
----
-
-# Diagrams
-
-You can create diagrams / graphs from textual descriptions, directly in your Markdown.
-
-<div class="grid grid-cols-4 gap-5 pt-4 -mb-6">
-
-```mermaid {scale: 0.5, alt: 'A simple sequence diagram'}
-sequenceDiagram
-    Alice->John: Hello John, how are you?
-    Note over Alice,John: A typical interaction
 ```
 
-```mermaid {theme: 'neutral', scale: 0.8}
-graph TD
-B[Text] --> C{Decision}
-C -->|One| D[Result 1]
-C -->|Two| E[Result 2]
-```
+* **動作への特殊制御**  
+```php
 
-```mermaid
-mindmap
-  root((mindmap))
-    Origins
-      Long history
-      ::icon(fa fa-book)
-      Popularisation
-        British popular psychology author Tony Buzan
-    Research
-      On effectiveness<br/>and features
-      On Automatic creation
-        Uses
-            Creative techniques
-            Strategic planning
-            Argument mapping
-    Tools
-      Pen and paper
-      Mermaid
-```
-
-```plantuml {scale: 0.7}
-@startuml
-
-package "Some Group" {
-  HTTP - [First Component]
-  [Another Component]
-}
-
-node "Other Groups" {
-  FTP - [Second Component]
-  [First Component] --> FTP
-}
-
-cloud {
-  [Example 1]
-}
-
-database "MySql" {
-  folder "This is my folder" {
-    [Folder 3]
-  }
-  frame "Foo" {
-    [Frame 4]
-  }
-}
-
-[Another Component] --> [Example 1]
-[Example 1] --> [Folder 3]
-[Folder 3] --> [Frame 4]
-
-@enduml
-```
-
-</div>
-
-Learn more: [Mermaid Diagrams](https://sli.dev/features/mermaid) and [PlantUML Diagrams](https://sli.dev/features/plantuml)
-
----
-foo: bar
-dragPos:
-  square: 691,32,167,_,-16
----
-
-# Draggable Elements
-
-Double-click on the draggable elements to edit their positions.
-
-<br>
-
-###### Directive Usage
-
-```md
-<img v-drag="'square'" src="https://sli.dev/logo.png">
-```
-
-<br>
-
-###### Component Usage
-
-```md
-<v-drag text-3xl>
-  <div class="i-carbon:arrow-up" />
-  Use the `v-drag` component to have a draggable container!
-</v-drag>
-```
-
-<v-drag pos="618,206,261,_,-15">
-  <div text-center text-3xl border border-main rounded>
-    Double-click me!
-  </div>
-</v-drag>
-
-<img v-drag="'square'" src="https://sli.dev/logo.png">
-
-###### Draggable Arrow
-
-```md
-<v-drag-arrow two-way />
-```
-
-<v-drag-arrow pos="67,452,253,46" two-way op70 />
-
----
-src: ./pages/imported-slides.md
-hide: false
----
-
----
-
-# Monaco Editor
-
-Slidev provides built-in Monaco Editor support.
-
-Add `{monaco}` to the code block to turn it into an editor:
-
-```ts {monaco}
-import { ref } from 'vue'
-import { emptyArray } from './external'
-
-const arr = ref(emptyArray(10))
-```
-
-Use `{monaco-run}` to create an editor that can execute the code directly in the slide:
-
-```ts {monaco-run}
-import { version } from 'vue'
-import { emptyArray, sayHello } from './external'
-
-sayHello()
-console.log(`vue ${version}`)
-console.log(emptyArray<number>(10).reduce(fib => [...fib, fib.at(-1)! + fib.at(-2)!], [1, 1]))
 ```
 
 ---
-layout: center
-class: text-center
+
+# 責務分離による実装
+
+* 決定ルール・Enum変換・条件判定の分離
+* 条件判定処理の共通化と決定ルールの差し替え
+
 ---
 
-# Learn More
+# 導入のメリットと実践的な効果
+デシジョンテーブル実装のビジネス価値
 
-[Documentation](https://sli.dev) · [GitHub](https://github.com/slidevjs/slidev) · [Showcases](https://sli.dev/resources/showcases)
+* **決定ルールと実績データの関心事を分離**
+  - ビジネスルールとデータ処理ロジックの明確な切り分け
+  - コードの責務が明確になり変更の影響範囲が限定される
 
-<div class="flex justify-center">
+* **決定ルール自体の品質担保が容易**
+  - ルールだけを独立してテスト可能
+  - 変更箇所が明示的で影響分析が簡単
 
-<QRCode value="https://github.com/k2tzumi/slidev-boilerplate" color="0e0c0d" image="github-mark.svg" />
+* **実績データが変わっても影響が少ない**
+  - 数値項目と条件の変換は必要だが、基本ロジックは安定
+  - 入力データ形式の変更に強い設計
 
-</div>
+* **条件判定結果の検証が容易**
+  - 対応するマスターデータとの照合が容易
+  - 想定結果との差異を迅速に特定可能
 
-<PoweredBySlidev mt-10 />
+* **全パターンテストによる品質向上**
+  - 条件判定処理の妥当性を自動的に検証
+  - 組み合わせテストの実装が標準化され効率的
 
+* **PICTとの相性の良さ**
+  - 組み合わせテスト手法との親和性が高い
+  - テストケース数の効率的削減が可能
+
+
+
+# この表自体がデシジョンテーブル（決定表）に近い
+
+---
+
+* 実装パターンとしての可能性
+  - 条件分岐ロジックを構造化・可視化
+  - ビジネスルールをコードから分離し、保守性を向上
+  - 複雑な判定ロジックの可読性を高める
+
+
+---
+
+# テクニック
+
+* 条件は全てEnumの配列で定義する
+  * 数値条件も一旦Enum化する
+  * Enumの区分値は日本語で定義する
+* 決定ルールはGenerator関数で定義する
+  * 時系列で条件を変化させる
+  * ルールの実態クラスのオブジェクトは別途生成する
+* 特殊条件となるEnumには型を追加して制御させる
+  * 全ての条件に共通となるマーカーインタフェースをつける
+  * 複合条件の中から、一つの条件を選択させる
+  * 条件判定だけでなく、出力の制御もできる
+  * ルールの実態クラスのオブジェクト生成は型で判定して行う
+* 決定ルールとEnum変換と条件判定はそれぞれ独立したクラスにする
+  * 条件判定処理を共通化させて決定ルールの差し替え可能にする
+  * Enum変換時に決定ルールの変換漏れがあったらエラーにする
+  * 決定ルールから全ての組み合わせパターンを生成し、条件判定処理をテストする
+
+---
+
+# メリット
+
+* 決定ルールと実績データの関心事を分離することができる
+* 決定ルール自体の品質担保がしやすく独立している
+実績データが変わっても影響が少ない。数値項目と条件の変換は必要だけれども
+* 条件判定結果のアウトプットに対して対応するマスターが別途ある場合は答え合わせがしやすい
+* 一番検証パターン数が多くなる条件判定処理の妥当性がセルフチェックできる
+全パターンテストができる
+* 決定ルールがPICTと相性が良い
+* ビジネスロジックとアプリケーションロジックの分離ができる  
+業務ルールをアプリケーションコードから切り離して管理できるため、ルールの変更が容易になります。
+
+
+---
+layout: end
+---
+
+# Fin🎬
