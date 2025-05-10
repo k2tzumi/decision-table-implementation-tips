@@ -223,19 +223,32 @@ transition: fade-out
   - 変更部分に関連するテストケースの選定
 
 ---
-
+layout: image-right
+image: theme.jpeg
+transition: fade-out
+---
 
 # 今回のテーマ
 
 ---
+layout: statement
+transition: slide-up
+---
 
-# 🙅 デシジョンテーブル（決定表）を作成する
+# 🙅 デシジョンテーブル
+# （決定表）を書く
 テスト設計とか、仕様をまとめるのに利用するのではなく。。
 
 ---
+layout: statement
+---
 
-# 🙆 デシジョンテーブル（決定表）を実装する
+# 🙆 デシジョンテーブル
+# （決定表）を実装する
 
+---
+layout: statement
+transition: slide-up
 ---
 
 # 改めて自己紹介
@@ -266,7 +279,16 @@ transition: fade-out
 ---
 
 # 算定構造表（実物）
+https://www.mhlw.go.jp/content/12200000/001205331.pdf#page=2
 
+<Transform :scale="0.7">
+
+<img src="/calculation-structure.png" />
+
+</Transform>
+
+---
+layout: statement
 ---
 
 # 結構複雑。。
@@ -274,16 +296,30 @@ transition: fade-out
 ---
 
 # 元の原文（実物）
-報酬告示という内容になります
+報酬告示という内容になります。官報で縦書き
 
+<Transform :scale="0.7">
+
+<img src="/notice.png" />
+
+</Transform>
+
+https://www.mhlw.go.jp/content/001239565.pdf#page=3
+
+---
+layout: statement
 ---
 
 # もっと複雑。。
 
 ---
+layout: statement
+---
 
 # 😥 どうやって実装すれば。。
 
+---
+transition: slide-up
 ---
 
 # ともあれ何も考えなしに実装するとこうなりがち。。
@@ -292,18 +328,23 @@ transition: fade-out
 <Tweet id="476731996878553088" />
 
 ---
+transition: fade
+---
 
 # 手続き的にルールを書くことの弊害
 色々あるけれど
 
-* コードのネストが深く可読性が低い  
-所謂波動拳が発動する
-* 認知負荷が高い  
-元々複雑で図式化されているのに、手続きとして文章化（コード化）するとインピーダンスミスマッチ ^[ルールは宣言的だが、手続き的にすると直感的でなくなり、重複も発生する] が発生する
-* 同じルールが散らばってしまう  
-* 条件に関する入力データ（事実）も条件の組み合わせ（ルール）によって必要なものが変わってくる  
+* **コードのネストが深く可読性が低い**  
+波動拳が炸裂しがち
+* **認知負荷が高い**  
+元々複雑で図式化されているのに、手続きとして文章化（コード化）するとインピーダンスミスマッチ ^[ルールは宣言的だが、手続きとして纏め直すと直感的でなくなる。重複も発生する] が発生する
+* **同一規則のルールが散らばってしまう**  
+* **条件に関する入力データ（事実）も条件の組み合わせ（ルール）によって必要なものが変わってくる**  
 事実、条件、動作までを密結合させてしまうと、更に複雑になってしまう
 
+---
+layout: statement
+transition: slide-up
 ---
 
 # 💡デシジョンテーブル（決定表）の実装の機運！
@@ -334,7 +375,7 @@ transition: fade-out
 * 判断基準が明確  
 意思決定や処理の分岐が、複数の論理的なルールによって定義できる。
 * ルールの変更が発生する可能性  
-法改正、社内規定の変更、新商品の追加などにより、判断基準が変わることが比較的頻繁にある。
+<span v-mark="{ at: 1, color: 'orange', type: 'highlight' }">法改正</span>、社内規定の変更、新商品の追加などにより、判断基準が<span v-mark="{ at: 1, color: 'orange', type: 'highlight' }">比較的頻繁変わる</span>ことがある。
 * 例外処理が多い  
 定型的な処理だけでなく、多様な例外ケースに対する対応が必要。
 * 属人化された知識の形式知化  
@@ -342,9 +383,12 @@ transition: fade-out
 
 
 ---
+layout: image-right
+image: theme.jpeg
+transition: fade-out
+---
 
 # PHPでのデシジョンテーブル実装テクニック
-
 
 ---
 
@@ -376,23 +420,24 @@ transition: fade-out
   ```
 
 * **数値条件もEnum化**  
-  ```php
-  enum AnnualIncome
-  {
-    case ３００万未満;
-    case ３００-５００万;
-    case ５００万以上;
+境界値もわかりやすく
+```php {*|3-5|7-14|*}{lines:true}
+enum AnnualIncome
+{
+  case ３００万未満;
+  case ３００-５００万;
+  case ５００万以上;
 
-    public static function convert(int $value) : self
-    {
-      return match(true) {
-        $value >= 500 => self::５００万以上,
-        $value >= 300 => self::３００-５００万,
-        default => self::３００万未満
-      };
-    }
+  public static function convert(int $value) : self
+  {
+    return match(true) {
+      $value >= 500 => self::５００万以上,
+      $value >= 300 => self::３００-５００万,
+      default => self::３００万未満
+    };
   }
-  ```
+}
+```
 
 ---
 
@@ -401,46 +446,53 @@ transition: fade-out
 
 * **決定ルールはGenerator関数で定義**
   - イテレータとして条件の組み合わせを生成  
-  `yield` と `yield from`で柔軟に手続き的にルールを生成できる
+  `yield` と `yield from`で柔軟に手続き的にルールを宣言できる
 
 * **時系列で条件を変化させる**
   - 制度変更や期間限定ルールに対応
   - 日付による条件の切り替えを明示的に表現
 
 * **ルールの実態クラスのオブジェクトは別途生成**
-  - 生の配列の方が記述量が少なく見やすい
-  - 必要なケースだけを遅延評価でオブジェクト生成  
-  ケースが大量になるとメモリ使用量も馬鹿にならない
+  - 規約ベースでルールを生の配列で記述する方が、見やすくメンテナンスしやすい
+  - 必要なケースだけを遅延評価でオブジェクト生成させる  
+  大半のオブジェクトが参照（評価）されないのでGeneratorと相性が良い
 
 ---
 
-# 決定ルールをGenerator関数で定義（実装例）
-
-* **決定ルールはGenerator関数で定義**  
+# 決定ルールはGenerator関数で定義（実装例）
 時系列で条件を変化させたり、部分的に繰り返しルール適用したりする
-  ```php
-  public function generateRules(): Generator
-  {
-    yield ['承認', [EmploymentStatus::社員, Tenure::勤続３年以上, AnnualIncome::５００万以上]];
 
-    // 非承認ルールの生成（無職は勤続年数、年収は不問）
-    yield from generateDisapprovalRules();
+<Transform :scale="0.9">
 
-    // 2025年7月以降のルール
-    if ($reviewIn >= '202507') {
-      // 条件緩和
-      yield ['詳細審査', [EmploymentStatus::契約社員, Tenure::勤続３年以上, AnnualIncome::５００万以上]];
+```php {*|2,6-7|9-10,18-24|12-16|*}{lines:true}
+/**
+ * @return Generator<array{ 0: string, 1: list<Condition>}> 0: 動作部, 1: 条件部
+ */
+public function generateRules(): Generator
+{
+  yield ['承認', [EmploymentStatus::社員, Tenure::勤続３年以上, AnnualIncome::３００-５００万]];
+  yield ['承認', [EmploymentStatus::社員, Tenure::勤続３年以上, AnnualIncome::５００万以上]];
+
+  // 非承認ルールの生成（無職は勤続年数、年収は不問）
+  yield from generateDisapprovalRules();
+
+  // 2025年7月以降のルール
+  if ($reviewIn >= '202507') {
+    // 条件緩和
+    yield ['詳細審査', [EmploymentStatus::契約社員, Tenure::勤続３年以上, AnnualIncome::５００万以上]];
+  }
+}
+private function generateDisapprovalRules(): Generator
+{
+  foreach (Tenure::cases() as $tenure) {
+    foreach (AnnualIncome::cases() as $annualIncome) {
+      yield ['非承認', [EmploymentStatus::無職, $tenure, $annualIncome]];
     }
   }
-  public function generateDisapprovalRules(): Generator
-  {
-    foreach (Tenure::cases() as $tenure) {
-      foreach (AnnualIncome::cases() as $annualIncome) {
-        yield ['非承認', [EmploymentStatus::無職, $tenure, annualIncome]];
-      }
-    }
-  }
-  ```
+}
+```
+
+</Transform>
 
 ---
 
@@ -448,27 +500,28 @@ transition: fade-out
 
 * **ルールの実態クラスのオブジェクトは別途生成**  
 オブジェクト生成は外側で行い、ルール自体は遅延評価する
-  ```php
-  public function generateRuleObjects(): Generator
-  {
+```php {*|1-8,12|3|4-6|1,12-17|13-16|*}{lines:true}
+public function createRuleInstances(): Generator
+{
     foreach ($this->generateRules() as $ruleSet) {
-      // 動作部と条件部を分離させる
-      list($action, $rule) = ruleSet;
-      yield new Rule($action, $rule);
+        // 動作部と条件部を分離させる
+        [$action, $conditions] = $ruleSet;
+        yield new Rule($action, $conditions);
     }
-  }
-  public function getMatchAction(array $facts): ?Action
-  {
-    foreach ($this->generateRuleObjects() as $ruleObject) {
-      if ($ruleObject->canMatch($facts)) {
-        // 動作が特定できた以降のルールは評価されない
-        return $ruleObject->makeAction();
-      }
+}
 
-      return null;
+public function getMatchAction(array $facts): ?Action
+{
+    foreach ($this->createRuleInstances() as $ruleInstance) {
+        if ($ruleInstance->canMatch($facts)) {
+            // 動作が特定できた以降のルールは評価されない
+            return $ruleInstance->makeAction();
+        }
     }
-  }
-  ```
+    
+    return null; // 条件にマッチするものがない
+}
+```
 
 ---
 
@@ -477,16 +530,17 @@ transition: fade-out
 
 * **全ての条件に共通となるマーカーインタフェースを付与**
   - 型安全性の確保
-  ```php
-  interface Condition {}
-  enum AnnualIncome implements Condition {
-    // .. snip ..
-  }
-  /**
-   * @param list<Condition> $facts
-   */
-  public function getMatchAction(array $facts): ?Action
-  ```
+```php {*|1|2-4|5-8|*}{lines:true}
+interface Condition {}
+enum AnnualIncome implements Condition {
+  // .. snip ..
+}
+/**
+ * @param list<Condition> $facts
+  */
+public function getMatchAction(array $facts): ?Action
+```
+
 * **複合条件の中から、一つの条件を選択**  
 複数条件の組み合わせを型で制御
   - 例: 顧客に複数の割引条件が適用可能な場合に、一番割引率が高いもののみを適用させる
@@ -500,7 +554,8 @@ transition: fade-out
 型システムを活用した柔軟な条件定義
 
 * **複合条件の中から、一つの条件を選択**  
-```php
+割引率を定義できるようにして、一つの条件のみを選択させる
+```php {*|1-4|5|3,11-18|*}{lines:true}
 interface DiscountCondition extends Condition
 {
   public function getDiscountRate(): float;
@@ -513,6 +568,7 @@ enum MemberRank implements DiscountCondition
 
   public function getDiscountRate(): float
   {
+    // この割引率を他のDiscountConditionのものと比較する
     return match($this) {
       self::ランクA => 0.3,
       self::ランクB => 0.15,
@@ -522,24 +578,92 @@ enum MemberRank implements DiscountCondition
 }
 ```
 
-* **動作への特殊制御**  
-```php
+---
 
+# 特殊条件の型による制御（実装例）
+型システムを活用した柔軟な条件定義
+
+* **動作への特殊制御**  
+ルールの条件として含まれない特殊な型で、動作の評価時に参照して特別な処理を行う
+```php {*|1-4|1,5,11-15|*}{lines:true}
+interface RepeatableCondition extends Condition
+{
+  public function getCount(): int;
+}
+enum RepeatCount: int implements RepeatableCondition
+{
+  case なし = 0;
+  case １回 = 1;
+  case ２回 = 2;
+
+  public function getCount(): int
+  {
+    // この回数分、動作を繰り返す
+    return $this->value;
+  }
+}
 ```
 
 ---
 
 # 責務分離による実装
+一番複雑な決定ルールを安定させる為にできること
 
-* 決定ルール・Enum変換・条件判定の分離
-* 条件判定処理の共通化と決定ルールの差し替え
+* **決定ルール・Enum変換・条件判定はそれぞれ独立したクラスに**  
+  - 単一責任の原則（SRP）に基づく設計
+  - 変更の影響範囲を最小化  
+  入力データに関連する変化があっても決定ルールには影響しない
+  - テスト容易性の向上  
+  入力データとなる事実の収集はI/Oが重いので、分離したほうが良い  
+  一番テストケースが多い決定ルールのテストサイズを小さくできる
+* **条件判定処理を共通化し決定ルールの差し替えを可能とする**  
+  - 責務が分離できていれば決定ルールの差し替え
+
+---
+
+# より安定した実装にする為に
+ディシジョンテーブルの構造を最大限に利用する
+
+* **デシジョンテーブルの型を厳密にチェックする**  
+  - 決定ルール判定時に条件のEnumの過不足がないことをチェックする  
+  Enum変換時に決定ルールの変換漏れや重複はバグなので咎める  
+  Enumが存在しない = 条件を不問とはしない
+* **デシジョンテーブルから直交表を生成して組み合わせテストを行う**  
+  - Enumのcases全ての組み合わせを生成して後続処理も含めて動作検証する  
+  ディシジョンテーブルに矛盾がないか？をセルフチェックできる
+
+---
+layout: image-right
+image: theme.jpeg
+transition: fade-out
+---
+
+# まとめ
 
 ---
 
 # 導入のメリットと実践的な効果
-デシジョンテーブル実装のビジネス価値
+デシジョンテーブル自体の特性によるメリット
 
-* **決定ルールと実績データの関心事を分離**
+* **コードの品質と保守性向上**  
+  - 条件分岐ロジックを構造化・可視化  
+  複雑な条件分岐を表形式で整理することで直感的な理解が可能  
+  ネストの深いif文やswitch文を解消  
+
+* **変更容易性の大幅な向上**  
+  - ビジネスルールの変更に強い構造  
+  ルールの追加・変更・削除が表形式で明示的に管理可能  
+  条件の組み合わせパターンごとに独立して修正できるため変更の影響が局所化  
+  - 時間軸に沿った変更  
+  適用日や期間限定ルールを明示的に管理  
+  バージョン管理や履歴保持が容易になる構造
+
+---
+
+# 導入のメリットと実践的な効果
+デシジョンテーブルとその周辺の構造（アーキテクチャ）がもたらすメリット
+
+* **決定ルールと入力データの関心事を分離**
   - ビジネスルールとデータ処理ロジックの明確な切り分け
   - コードの責務が明確になり変更の影響範囲が限定される
 
@@ -547,9 +671,14 @@ enum MemberRank implements DiscountCondition
   - ルールだけを独立してテスト可能
   - 変更箇所が明示的で影響分析が簡単
 
-* **実績データが変わっても影響が少ない**
+* **入力データが変わっても影響が少ない**
   - 数値項目と条件の変換は必要だが、基本ロジックは安定
   - 入力データ形式の変更に強い設計
+
+---
+
+# 導入のメリットと実践的な効果
+デシジョンテーブルを活用することでのメリット
 
 * **条件判定結果の検証が容易**
   - 対応するマスターデータとの照合が容易
@@ -563,55 +692,8 @@ enum MemberRank implements DiscountCondition
   - 組み合わせテスト手法との親和性が高い
   - テストケース数の効率的削減が可能
 
-
-
-# この表自体がデシジョンテーブル（決定表）に近い
-
----
-
-* 実装パターンとしての可能性
-  - 条件分岐ロジックを構造化・可視化
-  - ビジネスルールをコードから分離し、保守性を向上
-  - 複雑な判定ロジックの可読性を高める
-
-
----
-
-# テクニック
-
-* 条件は全てEnumの配列で定義する
-  * 数値条件も一旦Enum化する
-  * Enumの区分値は日本語で定義する
-* 決定ルールはGenerator関数で定義する
-  * 時系列で条件を変化させる
-  * ルールの実態クラスのオブジェクトは別途生成する
-* 特殊条件となるEnumには型を追加して制御させる
-  * 全ての条件に共通となるマーカーインタフェースをつける
-  * 複合条件の中から、一つの条件を選択させる
-  * 条件判定だけでなく、出力の制御もできる
-  * ルールの実態クラスのオブジェクト生成は型で判定して行う
-* 決定ルールとEnum変換と条件判定はそれぞれ独立したクラスにする
-  * 条件判定処理を共通化させて決定ルールの差し替え可能にする
-  * Enum変換時に決定ルールの変換漏れがあったらエラーにする
-  * 決定ルールから全ての組み合わせパターンを生成し、条件判定処理をテストする
-
----
-
-# メリット
-
-* 決定ルールと実績データの関心事を分離することができる
-* 決定ルール自体の品質担保がしやすく独立している
-実績データが変わっても影響が少ない。数値項目と条件の変換は必要だけれども
-* 条件判定結果のアウトプットに対して対応するマスターが別途ある場合は答え合わせがしやすい
-* 一番検証パターン数が多くなる条件判定処理の妥当性がセルフチェックできる
-全パターンテストができる
-* 決定ルールがPICTと相性が良い
-* ビジネスロジックとアプリケーションロジックの分離ができる  
-業務ルールをアプリケーションコードから切り離して管理できるため、ルールの変更が容易になります。
-
-
 ---
 layout: end
 ---
 
-# Fin🎬
+ご清聴ありがとうございました
