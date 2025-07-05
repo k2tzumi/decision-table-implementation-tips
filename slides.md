@@ -768,33 +768,59 @@ public function getMatchAction(array $facts): ?Action
 # 特殊条件の型による制御
 型システムを活用した柔軟な条件定義
 
-* **全ての条件に共通となるマーカーインタフェースを付与**
-  - 型安全性の確保
-```php {*|1|2-4|5-8|*}{lines:true}
+<Transform :scale="1.2">
+
+* **🧩全ての条件に共通となるマーカーインタフェースを付与（🛡️ 型安全性の確保）**  
+```php {*|1|2-4|5-6|*}{lines:true}
 interface Condition {}
 enum AnnualIncome implements Condition {
   // .. snip ..
 }
-/**
- * @param list<Condition> $facts
-  */
+/** @param list<Condition> $facts */
 public function getMatchAction(array $facts): ?Action
 ```
 
-* **複合条件の中から、一つの条件を選択**  
-複数条件の組み合わせを型で制御
-  - 例: 顧客に複数の割引条件が適用可能な場合に、一番割引率が高いもののみを適用させる
-* **動作への特殊制御**  
-特殊制御用の型を定義する。決定ルールには使われないが、動作には反映される
-  - 例: 動作を繰り返し実行させる
+<v-click>
+
+* **🎯複合条件の中から、一つの条件を選択**  
+複数条件の組み合わせを型で制御  
+  🏷️ 例: 顧客に複数の割引条件が適用可能な場合に、一番割引率が高いもののみを適用させる
+</v-click>
+
+<v-click>
+
+* **⚙️動作への特殊制御**  
+特殊制御用の型を定義する。決定ルールには使われないが、動作には反映される  
+  🔁 例: 動作を繰り返し実行させる
+</v-click>
+
+</Transform>
+
+<!--
+より高度な制御のために、型システムを活用します。　　
+
+全ての条件に共通となるマーカーインタフェースを付与し、型安全性を確保します。
+
+[click] Conditionがマーカーインターフェースになります
+
+[click] 各条件クラスはこのマーカーインターフェースを実装します
+
+[click] 条件を扱う関数はすべて型安全で書ける様になります
+
+[click] この共通インターフェースは次の型制御につながります
+
+[click] 複合条件の中から、一つの条件を選択し、複数条件の組み合わせを型で制御することができます
+
+[click] 動作への特殊制御として、特殊制御用の型を定義します。決定ルールには使われませんが、動作には反映されます。例えば、動作を繰り返し実行させることができます。
+-->
 
 ---
 
-# 特殊条件の型による制御（実装例）
-型システムを活用した柔軟な条件定義
-
-* **複合条件の中から、一つの条件を選択**  
+# 🎯複合条件の中から、一つの条件を選択
 割引率を定義できるようにして、一つの条件のみを選択させる
+
+<Transform :scale="1.2">
+
 ```php {*|1-4|5|3,11-18|*}{lines:true}
 interface DiscountCondition extends Condition
 {
@@ -808,8 +834,7 @@ enum MemberRank implements DiscountCondition
 
   public function getDiscountRate(): float
   {
-    // この割引率を他のDiscountConditionのものと比較する
-    return match($this) {
+    return match($this) {  // この割引率を他のDiscountConditionのものと比較する
       self::ランクA => 0.3,
       self::ランクB => 0.15,
       self::ランクC => 0.0
@@ -818,13 +843,27 @@ enum MemberRank implements DiscountCondition
 }
 ```
 
+</Transform>
+
+<!--
+複合条件の中から、一つの条件を選択し、複数条件の組み合わせを型で制御する例です
+
+[click] 具体的な実装例では、割引率を定義できるようインターフェースを定義します
+
+[click] メンバーランクに応じた割引率を定義します
+
+[click] このメンバーランクの割引率と、例えば誕生月の割引率を比較とかして一番割引率が高いものを適用させることができます
+
+[click] 一つの条件のみを選択させるような実装が可能です。
+-->
+
 ---
 
-# 特殊条件の型による制御（実装例）
-型システムを活用した柔軟な条件定義
-
-* **動作への特殊制御**  
+# ⚙️動作への特殊制御
 ルールの条件として含まれない特殊な型で、動作の評価時に参照して特別な処理を行う
+
+<Transform :scale="1.4">
+
 ```php {*|1-4|1,5,11-15|*}{lines:true}
 interface RepeatableCondition extends Condition
 {
@@ -843,6 +882,12 @@ enum RepeatCount: int implements RepeatableCondition
   }
 }
 ```
+
+</Transform>
+
+<!--
+実用例として、キャンペーン景品の配布があります。例えばキャンペーンで「この条件に当てはまった時に景品をN個プレゼントする」という処理が実現できます。
+-->
 
 ---
 
