@@ -1,5 +1,8 @@
 # Changelog
 
+## [v0.0.1](https://github.com/k2tzumi/decision-table-implementation-tips/commits/v0.0.1) - 2025-07-05
+- Initial by @k2tzumi in https://github.com/k2tzumi/decision-table-implementation-tips/pull/1
+
 ## [v0.1.10](https://github.com/k2tzumi/slidev-boilerplate/compare/v0.1.9...v0.1.10) - 2025-05-04
 - bump up version by @k2tzumi in https://github.com/k2tzumi/slidev-boilerplate/pull/96
 
