@@ -610,9 +610,9 @@ Enumの区分値はドメイン用語を日本語で定義します。
 # Enumを活用した条件定義（実装例）
 
 * **📦 条件は全てEnum（列挙型）の配列で定義**  
-日本語も使うと、決定表と同じになる(正社員、勤続3年以上、年収500万以上)  
+日本語も使うと、決定表とほぼ同じになる(正社員、勤続3年以上、年収500万以上の例)  
   ```php
-  [ EmploymentStatus::社員, EmploymentDuration::３年以上, AnnualIncome::５００万以上 ]
+  [ EmploymentStatus::社員, Tenure::３年以上, AnnualIncome::５００万以上 ]
   ```
 
 * **🔢 数値条件もEnum化**  
@@ -677,7 +677,8 @@ enum AnnualIncome
 
 時系列に応じて条件を切り替えることで、制度変更や期間限定ルールなど、日付ベースの分岐を明示的に表現できます。
 
-ルールの実体クラスは必要なときだけ遅延生成し、定義は配列ベースで記述します。 これにより、見通しがよくメンテナンスしやすくなり、大半のルールが未評価のままでも済むため、ジェネレーターとの相性も良いです。
+ルールの実体クラスは必要なときだけ遅延生成し、定義は配列ベースで記述します  
+これにより、見通しがよくメンテナンスしやすくなり、大半のルールが未評価のままでも済む為、ジェネレーターとの相性も良いです。
 -->
 
 ---
@@ -691,7 +692,7 @@ enum AnnualIncome
 /**　@return Generator<array{ 0: string, 1: list<Condition>}> 0: 動作部, 1: 条件部 */
 public function generateRules(): Generator
 {
-  yield ['承認', [EmploymentStatus::社員, Tenure::勤続３年以上, AnnualIncome::３００-５００万]];
+  yield ['承認', [EmploymentStatus::社員, Tenure::勤続３年以上, AnnualIncome::３００-５００万未満]];
   yield ['承認', [EmploymentStatus::社員, Tenure::勤続３年以上, AnnualIncome::５００万以上]];
   yield from generateDisapprovalRules();  // ❌ 無職は一律非承認
 
@@ -713,7 +714,7 @@ private function generateDisapprovalRules(): Generator
 
 [click] yieldで戻り値の要素となる決定ルールを順次生成していきます
 
-[click] yield fromで他のジェネレーターからの値を委譲的にまとめて返すことができます。  
+[click] yield fromで他のジェネレーター関数に委譲して定義して、まとめて返却することができます。  
 ここでは無職は一律非承認のルール生成して一括返却しています
 
 [click] 時系列で決定ルールを変化させます  
@@ -762,466 +763,6 @@ public function getMatchAction(array $facts): ?Action
 
 [click] この様な処理手順でルール自体を遅延評価させることで、余分なオブジェクト生成しないので効率的な処理ができます
 -->
-
----
-
-# Generator遅延評価による実行フロー
-
-```plantuml
-@startuml Generator遅延評価による実行フロー
-
-!theme aws-orange
-skinparam backgroundColor #F8F9FA
-skinparam defaultFontName "Noto Sans CJK JP"
-skinparam participant {
-    BackgroundColor #E3F2FD
-    BorderColor #1976D2
-}
-skinparam sequence {
-    ArrowColor #1976D2
-    LifeLineBackgroundColor #FFFFFF
-    LifeLineBorderColor #1976D2
-}
-
-title Generator遅延評価による実行フロー\n(デシジョンテーブル実装での遅延評価)
-
-participant "呼び出し側" as Client
-participant "DecisionTable" as DT
-participant "Generator\n(createRuleInstances)" as Gen
-participant "generateRules()" as GenRules
-participant "Rule Object" as Rule
-participant "generateDisapprovalRules()" as GenDisapp
-
-== 1. 初期化フェーズ ==
-Client -> DT: getMatchAction($facts)
-activate DT
-
-note right of DT: 入力データを受け取り\n決定ルール処理を開始
-
-DT -> Gen: createRuleInstances()
-activate Gen
-
-note right of Gen: **遅延評価のポイント**\nGeneratorオブジェクト作成\n（まだルール生成は未実行）
-
-Gen --> DT: Generator Object
-deactivate Gen
-
-== 2. 遅延評価による順次実行開始 ==
-
-DT -> Gen: foreach開始
-activate Gen
-
-note right of Gen: この時点で初めて\ngenerateRules()が実行される
-
-Gen -> GenRules: 最初のyield呼び出し
-activate GenRules
-
-== 3. 1番目のルール生成 ==
-
-GenRules -> GenRules: yield ['承認', [社員, 勤続3年以上, 300-500万]]
-note right of GenRules: 最初のyield文実行\n条件: 社員 + 勤続3年以上 + 年収300-500万
-
-GenRules --> Gen: [$action, $conditions]
-Gen -> Rule: new Rule($action, $conditions)
-activate Rule
-Rule --> Gen: Rule Instance
-deactivate Rule
-
-Gen --> DT: Rule Instance
-DT -> Rule: canMatch($facts)
-activate Rule
-
-alt マッチした場合
-    Rule --> DT: true
-    deactivate Rule
-    DT -> Rule: makeAction()
-    activate Rule
-    Rule --> DT: Action Object
-    deactivate Rule
-    note right of DT: **早期終了**\nマッチしたので処理完了\n以降のyieldは実行されない
-    DT --> Client: Action Result
-    deactivate GenRules
-    deactivate Gen
-    deactivate DT
-else マッチしない場合
-    Rule --> DT: false
-    deactivate Rule
-    note right of DT: 次のyieldへ進む
-    
-    == 4. 2番目のルール生成 ==
-    
-    DT -> Gen: 次のイテレーション
-    Gen -> GenRules: 次のyield呼び出し
-    GenRules -> GenRules: yield ['承認', [社員, 勤続3年以上, 500万以上]]
-    note right of GenRules: 2番目のyield文実行\n条件: 社員 + 勤続3年以上 + 年収500万以上
-    
-    GenRules --> Gen: [$action, $conditions]
-    Gen -> Rule: new Rule($action, $conditions)
-    activate Rule
-    Rule --> Gen: Rule Instance
-    deactivate Rule
-    
-    Gen --> DT: Rule Instance
-    DT -> Rule: canMatch($facts)
-    activate Rule
-    
-    alt マッチした場合
-        Rule --> DT: true
-        deactivate Rule
-        DT -> Rule: makeAction()
-        activate Rule
-        Rule --> DT: Action Object
-        deactivate Rule
-        DT --> Client: Action Result
-        deactivate GenRules
-        deactivate Gen
-        deactivate DT
-    else マッチしない場合
-        Rule --> DT: false
-        deactivate Rule
-        
-        == 5. yield from による委譲処理 ==
-        
-        DT -> Gen: 次のイテレーション
-        Gen -> GenRules: yield from呼び出し
-        GenRules -> GenDisapp: generateDisapprovalRules()
-        activate GenDisapp
-        
-        note right of GenDisapp: **yield from の特徴**\n別のGenerator関数に委譲\n複数のルールを一括生成
-        
-        loop 各Tenure × AnnualIncome の組み合わせ
-            GenDisapp -> GenDisapp: yield ['非承認', [無職, $t, $i]]
-            note right of GenDisapp: 無職の場合の\n全パターンを生成
-            
-            GenDisapp --> GenRules: [$action, $conditions]
-            GenRules --> Gen: [$action, $conditions]
-            Gen -> Rule: new Rule($action, $conditions)
-            activate Rule
-            Rule --> Gen: Rule Instance
-            deactivate Rule
-            
-            Gen --> DT: Rule Instance
-            DT -> Rule: canMatch($facts)
-            activate Rule
-            
-            alt マッチした場合
-                Rule --> DT: true
-                deactivate Rule
-                DT -> Rule: makeAction()
-                activate Rule
-                Rule --> DT: Action Object
-                deactivate Rule
-                DT --> Client: Action Result
-                deactivate GenDisapp
-                deactivate GenRules
-                deactivate Gen
-                deactivate DT
-            else マッチしない場合
-                Rule --> DT: false
-                deactivate Rule
-                note right of DT: 次のパターンへ
-            end
-        end
-        
-        deactivate GenDisapp
-        
-        == 6. 時系列制御による動的ルール生成 ==
-        
-        DT -> Gen: 次のイテレーション
-        Gen -> GenRules: 時系列制御チェック
-        GenRules -> GenRules: if ($reviewIn >= '202507')
-        
-        alt 2025年7月以降の場合
-            GenRules -> GenRules: yield ['詳細審査', [契約社員, 勤続3年以上, 500万以上]]
-            note right of GenRules: **時系列制御**\n実行時の日付により\n動的にルールセットが変化
-            
-            GenRules --> Gen: [$action, $conditions]
-            Gen -> Rule: new Rule($action, $conditions)
-            activate Rule
-            Rule --> Gen: Rule Instance
-            deactivate Rule
-            
-            Gen --> DT: Rule Instance
-            DT -> Rule: canMatch($facts)
-            activate Rule
-            
-            alt マッチした場合
-                Rule --> DT: true
-                deactivate Rule
-                DT -> Rule: makeAction()
-                activate Rule
-                Rule --> DT: Action Object
-                deactivate Rule
-                DT --> Client: Action Result
-                deactivate GenRules
-                deactivate Gen
-                deactivate DT
-            else マッチしない場合
-                Rule --> DT: false
-                deactivate Rule
-            end
-        else 2025年7月より前の場合
-            note right of GenRules: このyieldはスキップされる\n（時系列による動的制御）
-        end
-        
-        == 7. 全ルールでマッチしない場合 ==
-        
-        GenRules --> Gen: Generator終了
-        deactivate GenRules
-        Gen --> DT: null
-        deactivate Gen
-        DT --> Client: null (マッチするルールなし)
-        deactivate DT
-    end
-end
-
-note over Client, GenDisapp
-**遅延評価の利点**
-• メモリ効率: 必要な分だけオブジェクト生成
-• 早期終了: マッチした時点で処理完了
-• 時系列制御: 実行時の状況による動的ルール変化
-• 柔軟性: yield from による複雑なルール構成
-• 保守性: 直感的で読みやすいルール定義
-end note
-
-@enduml
-```
-
----
-
-# Generator遅延評価 vs 従来方式の比較
-
-```plantuml
-@startuml Generator遅延評価 vs 従来方式の比較
-
-!theme aws-orange
-skinparam backgroundColor #F8F9FA
-skinparam defaultFontName "Noto Sans CJK JP"
-
-title Generator遅延評価 vs 従来方式\nメモリ使用量とオブジェクト生成タイミングの比較
-
-package "従来方式（一括生成）" as Traditional {
-    class "DecisionTable" as DT1 {
-        - rules: Rule[]
-        + getAllRules(): Rule[]
-        + getMatchAction(facts): Action
-    }
-    
-    class "Rule1" as R1 {
-        - action: string
-        - conditions: Condition[]
-    }
-    
-    class "Rule2" as R2 {
-        - action: string
-        - conditions: Condition[]
-    }
-    
-    class "Rule3" as R3 {
-        - action: string
-        - conditions: Condition[]
-    }
-    
-    class "Rule4" as R4 {
-        - action: string
-        - conditions: Condition[]
-    }
-    
-    class "Rule5" as R5 {
-        - action: string
-        - conditions: Condition[]
-    }
-    
-    DT1 --> R1: 初期化時に\n全て生成
-    DT1 --> R2
-    DT1 --> R3
-    DT1 --> R4
-    DT1 --> R5
-    
-    note right of DT1 #FFE6E6
-        **問題点**
-        • 初期化時に全Ruleオブジェクト生成
-        • 使わないルールもメモリ消費
-        • スケールしない（ルール数増加時）
-        • 早期終了の恩恵なし
-    end note
-}
-
-package "Generator方式（遅延評価）" as GeneratorWay {
-    class "DecisionTable" as DT2 {
-        + createRuleInstances(): Generator
-        + getMatchAction(facts): Action
-    }
-    
-    class "Generator" as Gen {
-        - currentRule: Rule|null
-        + current(): Rule
-        + next(): void
-        + valid(): bool
-    }
-    
-    class "generateRules()" as GenFunc {
-        + yield: [action, conditions]
-        + yield from: other generators
-    }
-    
-    class "Rule (On-demand)" as RuleOD {
-        - action: string
-        - conditions: Condition[]
-        --
-        **必要時のみ生成**
-    }
-    
-    DT2 --> Gen: Generatorオブジェクト\nのみ保持
-    Gen ..> GenFunc: 遅延実行
-    GenFunc ..> RuleOD: yield時に\n動的生成
-    
-    note right of DT2 #E6FFE6
-        **利点**
-        • 必要時のみRuleオブジェクト生成
-        • メモリ使用量が大幅削減
-        • 早期終了による高速化
-        • スケーラブル（ルール数に依存しない）
-        • 時系列制御が可能
-    end note
-}
-
-@enduml
-
-@startuml Generator内部構造と実行フロー
-
-!theme aws-orange
-skinparam backgroundColor #F8F9FA
-skinparam defaultFontName "Noto Sans CJK JP"
-
-title Generator内部構造と遅延評価の仕組み
-
-package "Generator Internal Structure" {
-    
-    state "Generator作成" as GEN_INIT #E3F2FD
-    state "Iterator開始" as ITER_START #FFF3E0
-    state "yield実行" as YIELD_EXEC #E8F5E8
-    state "Rule生成" as RULE_CREATE #FCE4EC
-    state "条件マッチング" as MATCH_CHECK #F3E5F5
-    state "次のyield" as NEXT_YIELD #E1F5FE
-    state "処理完了" as COMPLETE #E8F5E8
-    
-    [*] --> GEN_INIT: createRuleInstances()
-    
-    GEN_INIT --> ITER_START: foreach開始\n（この時点で初実行）
-    
-    ITER_START --> YIELD_EXEC: 最初のyield
-    
-    YIELD_EXEC --> RULE_CREATE: yield [action, conditions]
-    
-    RULE_CREATE --> MATCH_CHECK: new Rule(action, conditions)\ncanMatch(facts)
-    
-    MATCH_CHECK --> COMPLETE: マッチした場合\nmakeAction()実行
-    MATCH_CHECK --> NEXT_YIELD: マッチしない場合
-    
-    NEXT_YIELD --> YIELD_EXEC: 次のyield文実行
-    
-    COMPLETE --> [*]
-    
-    note right of GEN_INIT
-        **初期化時**
-        • Generatorオブジェクトのみ作成
-        • 実際のルール生成は未実行
-        • メモリ使用量: 最小
-    end note
-    
-    note right of YIELD_EXEC
-        **yield実行時**
-        • ルール定義配列を生成
-        • まだRuleオブジェクトは未作成
-        • 遅延評価の核心部分
-    end note
-    
-    note right of RULE_CREATE
-        **Rule生成時**
-        • 必要時のみRuleオブジェクト作成
-        • 1つずつ順次処理
-        • メモリ効率的
-    end note
-    
-    note right of MATCH_CHECK
-        **条件マッチング**
-        • canMatch()で条件評価
-        • マッチしたら即座に処理完了
-        • 以降のyieldは実行されない
-    end note
-}
-
-@enduml
-
-@startuml 時系列制御とyield_fromの詳細
-
-!theme aws-orange
-skinparam backgroundColor #F8F9FA
-skinparam defaultFontName "Noto Sans CJK JP"
-
-title 時系列制御とyield fromによる委譲処理
-
-actor "実行時刻" as Time
-participant "generateRules()" as GenRules
-participant "generateDisapprovalRules()" as GenDisapp
-participant "Rule Factory" as Factory
-
-== 基本ルールの生成 ==
-
-GenRules -> Factory: yield ['承認', [社員, 勤続3年以上, 300-500万]]
-GenRules -> Factory: yield ['承認', [社員, 勤続3年以上, 500万以上]]
-
-== yield from による委譲処理 ==
-
-GenRules -> GenDisapp: yield from generateDisapprovalRules()
-activate GenDisapp
-
-note right of GenDisapp
-**yield from の動作**
-• 別のGenerator関数に処理委譲
-• foreach内でのネストしたyield
-• 複数ルールの一括生成
-end note
-
-loop 全てのTenure cases
-    loop 全てのAnnualIncome cases
-        GenDisapp -> Factory: yield ['非承認', [無職, $tenure, $income]]
-    end
-end
-
-deactivate GenDisapp
-
-== 時系列制御による動的ルール生成 ==
-
-Time -> GenRules: 現在日時チェック ($reviewIn)
-
-alt $reviewIn >= '202507' (2025年7月以降)
-    GenRules -> Factory: yield ['詳細審査', [契約社員, 勤続3年以上, 500万以上]]
-    note right of GenRules #E8F5E8
-        **2025年7月以降のみ有効**
-        制度変更により追加されたルール
-        動的な条件分岐による柔軟性
-    end note
-else $reviewIn < '202507' (2025年7月より前)
-    note right of GenRules #FFE6E6
-        **このyieldはスキップ**
-        時系列制御により未実行
-        過去の制度には適用されない
-    end note
-end
-
-note over Time, Factory
-**時系列制御の利点**
-• 制度変更への対応が容易
-• 過去・現在・未来のルールを同一コードで管理
-• デプロイ時期とルール適用時期の分離
-• バージョン管理が不要
-end note
-
-@enduml
-```
-
 ---
 
 # 特殊条件の型による制御
@@ -1469,6 +1010,12 @@ transition: fade-out
 
 </Transform>
 
+<!--
+ビジネスルールとデータ処理を分離することで、コードの責務が明確になり、変更の影響を最小限に抑えられます。  
+
+また、ルールは単体でテストしやすく、入力データの変更にも柔軟に対応できるため、品質と保守性の高い設計が可能です。
+-->
+
 ---
 
 # 導入のメリットと実践的な効果
@@ -1493,7 +1040,7 @@ transition: fade-out
 <!--
 条件判定の結果はマスターデータと照合しやすく、差異の特定も容易です。  
 全パターンテストを自動化することで、品質を高めつつ効率的な検証が可能になります。  
-また、PICTなどの組み合わせテスト手法とも相性が良く、テストケースの削減と網羅性の両立が図れます。
+また、PICTなどの組み合わせテスト手法とも相性が良く、テストケース数を抑えつつ、条件間の相互作用を網羅できます
 -->
 
 ---
