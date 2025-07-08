@@ -1,5 +1,8 @@
 # Changelog
 
+## [v0.0.3](https://github.com/k2tzumi/decision-table-implementation-tips/compare/v0.0.2...v0.0.3) - 2025-07-08
+- Add notes part2 by @k2tzumi in https://github.com/k2tzumi/decision-table-implementation-tips/pull/34
+
 ## [v0.0.2](https://github.com/k2tzumi/decision-table-implementation-tips/compare/v0.0.1...v0.0.2) - 2025-07-07
 - Add notes by @k2tzumi in https://github.com/k2tzumi/decision-table-implementation-tips/pull/28
 
