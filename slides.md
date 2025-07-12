@@ -918,6 +918,8 @@ enum RepeatCount: int implements RepeatableCondition
 -->
 
 ---
+transition: fade
+---
 
 # 責務分離による実装
 一番複雑な決定ルールを安定させる為にできること
@@ -940,6 +942,17 @@ enum RepeatCount: int implements RepeatableCondition
 より安定した実装にするために、決定ルール・Enum変換・条件判定はそれぞれ独立したクラスにします。  
 
 クラスを分離することで、変更の影響を局所化し、テストしやすく保守性の高い設計が可能になります。 条件判定処理を共通化すれば、決定ルールの差し替えも容易になり、柔軟な拡張が可能です。
+-->
+
+---
+layout: image
+image: decision-table-class-diagram.svg
+backgroundSize: 80%
+transition: slide-up | slide-down
+---
+
+<!--
+ディシジョンテーブルの関連クラスはこの様に層を分けて責務を分離します  
 -->
 
 ---
