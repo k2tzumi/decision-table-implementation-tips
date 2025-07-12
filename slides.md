@@ -20,6 +20,7 @@ transition: slide-left
 mdc: true
 addons:
   - '@katzumi/slidev-addon-qrcode'
+  - "@katzumi/slidev-addon-ogp-image"
   - slidev-addon-components
   - slidev-addon-rabbit
 ---
@@ -1073,6 +1074,20 @@ transition: fade-out
 条件判定の結果はマスターデータと照合しやすく、差異の特定も容易です。  
 全パターンテストを自動化することで、品質を高めつつ効率的な検証が可能になります。  
 また、PICTなどの組み合わせテスト手法とも相性が良く、テストケース数を抑えつつ、条件間の相互作用を網羅できます
+-->
+
+---
+
+# 参考資料
+
+<OgpImage url="https://kikakurui.com/x0/X0125-1986-01.html" />
+
+<OgpImage url="https://www.slideshare.net/slideshow/php55/14301315" />
+
+<OgpImage url="https://media.shaho.co.jp/n/n9b8a01360419" />
+
+<!--
+参考資料をまとめておきます
 -->
 
 ---
