@@ -1,0 +1,208 @@
+<svg viewBox="0 0 1400 1000" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景 -->
+  <rect width="1400" height="1000" fill="#f8f9fa"/>
+  
+  <!-- タイトル -->
+  <text x="700" y="40" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#333">
+    デシジョンテーブル実装のクラス構成
+  </text>
+  <text x="700" y="70" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#666">
+    決定ルール・Enum変換・条件判定・実行の責務分離
+  </text>
+  
+  <!-- レイヤー説明 -->
+  <g transform="translate(50, 100)">
+    <!-- 入力層 -->
+    <rect x="0" y="0" width="250" height="60" fill="#e8f4fd" stroke="#0066cc" stroke-width="2" rx="5"/>
+    <text x="125" y="35" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#0066cc">入力層</text>
+    
+    <!-- 変換層 -->
+    <rect x="300" y="0" width="250" height="60" fill="#fff4e6" stroke="#ff6b00" stroke-width="2" rx="5"/>
+    <text x="425" y="35" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#ff6b00">変換層</text>
+    
+    <!-- ルール層 -->
+    <rect x="600" y="0" width="250" height="60" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2" rx="5"/>
+    <text x="725" y="35" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#2e7d32">ルール層</text>
+    
+    <!-- 実行層 -->
+    <rect x="900" y="0" width="350" height="60" fill="#fce4ec" stroke="#c2185b" stroke-width="2" rx="5"/>
+    <text x="1075" y="35" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#c2185b">評価・実行層</text>
+  </g>
+  
+  <!-- インターフェース: Condition -->
+  <g transform="translate(750, 200)">
+    <rect x="0" y="0" width="300" height="80" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="2"/>
+    <text x="150" y="25" font-family="Arial, sans-serif" font-size="14" font-style="italic" text-anchor="middle" fill="#6a1b9a">&lt;&lt;interface&gt;&gt;</text>
+    <text x="150" y="45" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle">Condition</text>
+    <line x1="0" y1="55" x2="300" y2="55" stroke="#6a1b9a" stroke-width="1"/>
+    <text x="10" y="70" font-family="Arial, sans-serif" font-size="12" fill="#333">マーカーインターフェース</text>
+  </g>
+  
+  <!-- Enum: EmploymentStatus -->
+  <g transform="translate(250, 300)">
+    <rect x="0" y="0" width="200" height="120" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="2"/>
+    <text x="100" y="25" font-family="Arial, sans-serif" font-size="14" font-style="italic" text-anchor="middle" fill="#6a1b9a">&lt;&lt;enum&gt;&gt;</text>
+    <text x="100" y="45" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle">EmploymentStatus</text>
+    <line x1="0" y1="55" x2="200" y2="55" stroke="#6a1b9a" stroke-width="1"/>
+    <text x="10" y="75" font-family="Arial, sans-serif" font-size="12" fill="#333">社員</text>
+    <text x="10" y="95" font-family="Arial, sans-serif" font-size="12" fill="#333">契約社員</text>
+    <text x="10" y="115" font-family="Arial, sans-serif" font-size="12" fill="#333">無職</text>
+  </g>
+  
+  <!-- Enum: AnnualIncome -->
+  <g transform="translate(500, 300)">
+    <rect x="0" y="0" width="200" height="140" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="2"/>
+    <text x="100" y="25" font-family="Arial, sans-serif" font-size="14" font-style="italic" text-anchor="middle" fill="#6a1b9a">&lt;&lt;enum&gt;&gt;</text>
+    <text x="100" y="45" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle">AnnualIncome</text>
+    <line x1="0" y1="55" x2="200" y2="55" stroke="#6a1b9a" stroke-width="1"/>
+    <text x="10" y="75" font-family="Arial, sans-serif" font-size="12" fill="#333">３００万未満</text>
+    <text x="10" y="95" font-family="Arial, sans-serif" font-size="12" fill="#333">３００-５００万未満</text>
+    <text x="10" y="115" font-family="Arial, sans-serif" font-size="12" fill="#333">５００万以上</text>
+    <line x1="0" y1="125" x2="200" y2="125" stroke="#6a1b9a" stroke-width="1"/>
+    <text x="10" y="140" font-family="Arial, sans-serif" font-size="10" fill="#333">+ convert(int): self</text>
+  </g>
+  
+  <!-- インターフェース: DiscountCondition -->
+  <g transform="translate(1100, 300)">
+    <rect x="0" y="0" width="250" height="100" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="2"/>
+    <text x="125" y="25" font-family="Arial, sans-serif" font-size="14" font-style="italic" text-anchor="middle" fill="#6a1b9a">&lt;&lt;interface&gt;&gt;</text>
+    <text x="125" y="45" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle">DiscountCondition</text>
+    <line x1="0" y1="55" x2="250" y2="55" stroke="#6a1b9a" stroke-width="1"/>
+    <text x="10" y="75" font-family="Arial, sans-serif" font-size="12" fill="#333">+ getDiscountRate(): float</text>
+    <text x="10" y="90" font-family="Arial, sans-serif" font-size="11" fill="#666" font-style="italic">// 複合条件の選択用</text>
+  </g>
+  
+  <!-- クラス: InputData -->
+  <g transform="translate(50, 500)">
+    <rect x="0" y="0" width="250" height="120" fill="#e8f4fd" stroke="#0066cc" stroke-width="2"/>
+    <text x="125" y="25" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle">InputData</text>
+    <line x1="0" y1="35" x2="250" y2="35" stroke="#0066cc" stroke-width="1"/>
+    <text x="10" y="55" font-family="Arial, sans-serif" font-size="12" fill="#333">+ employmentType: string</text>
+    <text x="10" y="75" font-family="Arial, sans-serif" font-size="12" fill="#333">+ yearsOfService: int</text>
+    <text x="10" y="95" font-family="Arial, sans-serif" font-size="12" fill="#333">+ annualIncome: int</text>
+    <text x="10" y="110" font-family="Arial, sans-serif" font-size="11" fill="#666" font-style="italic">// 生の入力データ</text>
+  </g>
+  
+  <!-- クラス: ConditionConverter -->
+  <g transform="translate(350, 500)">
+    <rect x="0" y="0" width="250" height="140" fill="#fff4e6" stroke="#ff6b00" stroke-width="2"/>
+    <text x="125" y="25" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle">ConditionConverter</text>
+    <line x1="0" y1="35" x2="250" y2="35" stroke="#ff6b00" stroke-width="1"/>
+    <text x="10" y="55" font-family="Arial, sans-serif" font-size="12" fill="#333">+ convert(data: InputData):</text>
+    <text x="20" y="75" font-family="Arial, sans-serif" font-size="12" fill="#333">list&lt;Condition&gt;</text>
+    <line x1="0" y1="85" x2="250" y2="85" stroke="#ff6b00" stroke-width="1" stroke-dasharray="3,3"/>
+    <text x="10" y="105" font-family="Arial, sans-serif" font-size="11" fill="#666">// 数値→Enum変換</text>
+    <text x="10" y="125" font-family="Arial, sans-serif" font-size="11" fill="#666">// 境界値判定を集約</text>
+  </g>
+  
+  <!-- クラス: DecisionTable -->
+  <g transform="translate(650, 500)">
+    <rect x="0" y="0" width="300" height="140" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+    <text x="150" y="25" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle">DecisionTable</text>
+    <line x1="0" y1="35" x2="300" y2="35" stroke="#2e7d32" stroke-width="1"/>
+    <text x="10" y="55" font-family="Arial, sans-serif" font-size="12" fill="#333">+ generateRules(): Generator</text>
+    <line x1="0" y1="65" x2="300" y2="65" stroke="#2e7d32" stroke-width="1" stroke-dasharray="3,3"/>
+    <text x="10" y="85" font-family="Arial, sans-serif" font-size="11" fill="#666">// ルール定義をGeneratorで管理</text>
+    <text x="10" y="105" font-family="Arial, sans-serif" font-size="11" fill="#666">// 時系列での条件変化に対応</text>
+    <text x="10" y="125" font-family="Arial, sans-serif" font-size="11" fill="#666">// ビジネスルールの保持に専念</text>
+  </g>
+  
+  <!-- クラス: RuleEvaluator -->
+  <g transform="translate(1000, 500)">
+    <rect x="0" y="0" width="350" height="220" fill="#fce4ec" stroke="#c2185b" stroke-width="2"/>
+    <text x="175" y="25" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle">RuleEvaluator</text>
+    <line x1="0" y1="35" x2="350" y2="35" stroke="#c2185b" stroke-width="1"/>
+    <text x="10" y="55" font-family="Arial, sans-serif" font-size="12" fill="#333">+ createRuleInstances(): Generator</text>
+    <text x="10" y="75" font-family="Arial, sans-serif" font-size="12" fill="#333">+ getMatchAction(facts: list&lt;Condition&gt;): ?Action</text>
+    <line x1="0" y1="85" x2="350" y2="85" stroke="#c2185b" stroke-width="1" stroke-dasharray="3,3"/>
+    <text x="10" y="105" font-family="Arial, sans-serif" font-size="11" fill="#666">// ルールの評価と実行を担当</text>
+    <text x="10" y="125" font-family="Arial, sans-serif" font-size="11" fill="#666">// Enumの型判定処理:</text>
+    <text x="20" y="145" font-family="Arial, sans-serif" font-size="11" fill="#666">- DiscountCondition: 最高割引率を選択</text>
+    <text x="20" y="165" font-family="Arial, sans-serif" font-size="11" fill="#666">- RepeatableCondition: 動作を繰り返し実行</text>
+    <text x="10" y="185" font-family="Arial, sans-serif" font-size="11" fill="#666">// 特殊制御の実装</text>
+    <text x="10" y="205" font-family="Arial, sans-serif" font-size="11" fill="#666">// 複合条件から一つを選択するロジック</text>
+  </g>
+  
+  <!-- クラス: Rule -->
+  <g transform="translate(750, 780)">
+    <rect x="0" y="0" width="200" height="120" fill="#fff8e1" stroke="#f57c00" stroke-width="2"/>
+    <text x="100" y="25" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle">Rule</text>
+    <line x1="0" y1="35" x2="200" y2="35" stroke="#f57c00" stroke-width="1"/>
+    <text x="10" y="55" font-family="Arial, sans-serif" font-size="12" fill="#333">- action: string</text>
+    <text x="10" y="75" font-family="Arial, sans-serif" font-size="12" fill="#333">- conditions: list&lt;Condition&gt;</text>
+    <line x1="0" y1="85" x2="200" y2="85" stroke="#f57c00" stroke-width="1"/>
+    <text x="10" y="105" font-family="Arial, sans-serif" font-size="12" fill="#333">+ canMatch(facts): bool</text>
+  </g>
+  
+  <!-- クラス: Action -->
+  <g transform="translate(1050, 780)">
+    <rect x="0" y="0" width="200" height="100" fill="#fff8e1" stroke="#f57c00" stroke-width="2"/>
+    <text x="100" y="25" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle">Action</text>
+    <line x1="0" y1="35" x2="200" y2="35" stroke="#f57c00" stroke-width="1"/>
+    <text x="10" y="55" font-family="Arial, sans-serif" font-size="12" fill="#333">+ execute(): void</text>
+    <text x="10" y="75" font-family="Arial, sans-serif" font-size="11" fill="#666" font-style="italic">// 動作の実行</text>
+  </g>
+  
+  <!-- 関連線 -->
+  <!-- InputData -> ConditionConverter -->
+  <path d="M 300 560 L 350 560" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- ConditionConverter -> Enum (uses) -->
+  <path d="M 400 500 L 350 420" stroke="#333" stroke-width="2" stroke-dasharray="5,5"/>
+  <path d="M 500 500 L 600 440" stroke="#333" stroke-width="2" stroke-dasharray="5,5"/>
+  <text x="320" y="470" font-family="Arial, sans-serif" font-size="11" fill="#666">uses</text>
+  <text x="580" y="470" font-family="Arial, sans-serif" font-size="11" fill="#666">uses</text>
+  
+  <!-- EmploymentStatus implements Condition -->
+  <path d="M 450 340 L 750 240" stroke="#6a1b9a" stroke-width="2" stroke-dasharray="5,5"/>
+  <text x="580" y="280" font-family="Arial, sans-serif" font-size="11" fill="#6a1b9a">implements</text>
+  
+  <!-- AnnualIncome implements Condition -->
+  <path d="M 700 340 L 850 280" stroke="#6a1b9a" stroke-width="2" stroke-dasharray="5,5"/>
+  
+  <!-- DiscountCondition extends Condition -->
+  <path d="M 1100 340 L 1050 260" stroke="#6a1b9a" stroke-width="2"/>
+  <text x="1070" y="300" font-family="Arial, sans-serif" font-size="11" fill="#6a1b9a">extends</text>
+  
+  <!-- ConditionConverter -> DecisionTable -->
+  <path d="M 600 570 L 650 570" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- DecisionTable -> RuleEvaluator -->
+  <path d="M 950 570 L 1000 570" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- RuleEvaluator -> Rule -->
+  <path d="M 1100 720 L 850 780" stroke="#333" stroke-width="2"/>
+  <text x="950" y="750" font-family="Arial, sans-serif" font-size="11" fill="#666">creates</text>
+  
+  <!-- RuleEvaluator -> Action -->
+  <path d="M 1175 720 L 1150 780" stroke="#333" stroke-width="2"/>
+  <text x="1185" y="750" font-family="Arial, sans-serif" font-size="11" fill="#666">returns</text>
+  
+  <!-- RuleEvaluator uses DiscountCondition -->
+  <path d="M 1175 500 L 1225 400" stroke="#333" stroke-width="2" stroke-dasharray="5,5"/>
+  <text x="1240" y="450" font-family="Arial, sans-serif" font-size="11" fill="#666">uses</text>
+  
+  <!-- 矢印の定義 -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="10" refY="5" orient="auto">
+      <polygon points="0 0, 10 5, 0 10" fill="#333"/>
+    </marker>
+  </defs>
+  
+  <!-- 説明テキスト -->
+  <g transform="translate(50, 930)">
+    <text x="0" y="0" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#333">4層構造による責務分離：</text>
+    <text x="0" y="25" font-family="Arial, sans-serif" font-size="12" fill="#666">
+      1. 入力層: 生データのI/O処理
+    </text>
+    <text x="250" y="25" font-family="Arial, sans-serif" font-size="12" fill="#666">
+      2. 変換層: 数値→Enum変換
+    </text>
+    <text x="500" y="25" font-family="Arial, sans-serif" font-size="12" fill="#666">
+      3. ルール層: ビジネスルール定義
+    </text>
+    <text x="750" y="25" font-family="Arial, sans-serif" font-size="12" fill="#666">
+      4. 評価・実行層: ルール評価と特殊制御
+    </text>
+  </g>
+</svg>
