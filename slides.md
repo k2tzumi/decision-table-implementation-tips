@@ -320,7 +320,7 @@ transition: fade-out
 
 ---
 layout: image-right
-image: theme.jpeg
+image: /theme.jpeg
 transition: fade-out
 ---
 
@@ -576,7 +576,7 @@ transition: fade-out
 
 ---
 layout: image-right
-image: theme.jpeg
+image: /theme.jpeg
 transition: fade-out
 ---
 
@@ -985,7 +985,7 @@ Enumのケース、全ての組み合わせを生成して後続処理も含め�
 
 ---
 layout: image-right
-image: theme.jpeg
+image: /theme.jpeg
 transition: fade-out
 ---
 
