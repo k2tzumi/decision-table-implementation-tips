@@ -1,5 +1,8 @@
 # Changelog
 
+## [v0.0.4](https://github.com/k2tzumi/decision-table-implementation-tips/compare/v0.0.3...v0.0.4) - 2025-07-18
+- Add decision table class diagram and update slide transitions by @k2tzumi in https://github.com/k2tzumi/decision-table-implementation-tips/pull/36
+
 ## [v0.0.3](https://github.com/k2tzumi/decision-table-implementation-tips/compare/v0.0.2...v0.0.3) - 2025-07-08
 - Add notes part2 by @k2tzumi in https://github.com/k2tzumi/decision-table-implementation-tips/pull/34
 
