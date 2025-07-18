@@ -12,6 +12,7 @@
     "lint": "textlint slides.md"
   },
   "dependencies": {
+    "@katzumi/slidev-addon-ogp-image": "^0.0.5",
     "@katzumi/slidev-addon-qrcode": "^0.0.17",
     "@slidev/cli": "^52.0.0",
     "@slidev/theme-default": "^0.25.0",
@@ -29,11 +30,11 @@
     "@iconify-json/logos": "^1.2.4",
     "@iconify-json/material-symbols": "^1.2.29",
     "@iconify-json/noto": "^1.2.3",
-    "@iconify-json/simple-icons": "^1.2.41",
+    "@iconify-json/simple-icons": "^1.2.42",
     "@iconify-json/skill-icons": "^1.2.0",
     "@iconify-json/twemoji": "^1.2.2",
-    "playwright-chromium": "^1.53.2",
-    "textlint": "^15.1.1",
+    "playwright-chromium": "^1.54.1",
+    "textlint": "^15.2.0",
     "textlint-filter-rule-comments": "^1.2.2",
     "textlint-rule-preset-ja-spacing": "^2.4.3",
     "textlint-rule-preset-ja-technical-writing": "^12.0.2"
