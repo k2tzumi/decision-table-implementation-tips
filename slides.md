@@ -949,7 +949,7 @@ transition: fade
 
 ---
 layout: image
-image: decision-table-class-diagram.svg
+image: /decision-table-class-diagram.svg
 backgroundSize: 80%
 transition: slide-up | slide-down
 ---
