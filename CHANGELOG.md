@@ -1,5 +1,8 @@
 # Changelog
 
+## [v0.0.6](https://github.com/k2tzumi/decision-table-implementation-tips/compare/v0.0.5...v0.0.6) - 2025-07-21
+- Fix orthogonal table by @k2tzumi in https://github.com/k2tzumi/decision-table-implementation-tips/pull/42
+
 ## [v0.0.5](https://github.com/k2tzumi/decision-table-implementation-tips/compare/v0.0.4...v0.0.5) - 2025-07-19
 - Fix typos and improve clarity in presentation slides by @k2tzumi in https://github.com/k2tzumi/decision-table-implementation-tips/pull/40
 
